@@ -44,7 +44,7 @@
  cfg.innerHTML='<label>Máximo de vencidos por dia <input id="maxDue" type="number" min="0" max="500"></label><button id="saveMaxDue">Salvar máximo</button><p class="note">Depois de dias parado, a fila não vira uma montanha: os vencidos mais antigos vêm primeiro e o restante fica para os dias seguintes. Use 0 para não limitar. Padrão: '+Revisao.DUE_DEFAULT+'.</p>';
  $('saveSettings').after(cfg);
  const fill=()=>{if(s)$('maxDue').value=Revisao.dueLimit(s);};
- $('saveMaxDue').onclick=()=>{const n=Number($('maxDue').value);if(!Number.isInteger(n)||n<0||n>500)return notify('Escolha um número inteiro de 0 a 500.');if(s){const next=structuredClone(s);next.settings.maxDuePerDay=n;if(persist(next))notify('Máximo diário de vencidos salvo.');}};
+ $('saveMaxDue').onclick=()=>{const n=Number($('maxDue').value);if(!Number.isInteger(n)||n<0||n>500)return notify('Escolha um número inteiro de 0 a 500.');if(s){const next=structuredClone(s);next.settings.maxDuePerDay=n;next.settings.changedAt=new Date().toISOString();if(persist(next))notify('Máximo diário de vencidos salvo.');}};
  window.Foco={update:q=>{update(q);fill();}};
  render();
 })();
