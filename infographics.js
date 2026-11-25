@@ -1,6 +1,9 @@
 'use strict';
 (()=>{
 const items=[
+['meta-32-ctbga-revisao-aulas-08-10-pagina-1','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 1/3 — PL e reservas de capital'],
+['meta-32-ctbga-revisao-aulas-08-10-pagina-2','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 2/3 — Reserva legal e destinação'],
+['meta-32-ctbga-revisao-aulas-08-10-pagina-3','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 3/3 — Dividendos, DLPA e DMPL'],
 ['meta-32-dadm-revisao-aula-08-pagina-1','Direito Administrativo','Contratação direta · Pág. 1/2 — O mapa'],
 ['meta-32-dadm-revisao-aula-08-pagina-2','Direito Administrativo','Contratação direta · Pág. 2/2 — Inexigível × dispensável'],
 ['meta-32-dadm-revisao-aulas-04-05-pagina-1','Direito Administrativo','Poderes e terceiro setor · Pág. 1/3 — Poderes e deveres'],
