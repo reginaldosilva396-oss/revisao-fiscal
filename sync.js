@@ -15,7 +15,7 @@
  function ui(){
   $('sync-off').hidden=!!cfg;$('sync-on').hidden=!cfg;
   if(!cfg)status('Não conectado: os dados ficam só neste aparelho.');
-  else if(cfg.last)status('Conectado. Última sincronização: '+new Date(cfg.last).toLocaleString('pt-BR')+'.');
+  else if(cfg.last)status('Sincronizado em '+new Date(cfg.last).toLocaleString('pt-BR')+(cfg.cards!==undefined?' · '+cfg.cards+' cartões, '+cfg.reviews+' revisões':'')+'.');
   else status('Conectado.');
  }
  async function gh(path,opt={}){
@@ -23,24 +23,24 @@
   if(res.status===401)throw Object.assign(Error('Token inválido ou expirado. Desconecte e conecte com um token novo.'),{auth:true});
   if(res.status===403||res.status===404)throw Object.assign(Error('O token não tem permissão de gist, ou o gist foi apagado. Gere um token com a permissão gist.'),{auth:true});
   if(!res.ok)throw Error('GitHub respondeu '+res.status+'. Tente de novo mais tarde.');
-  return res.json();
+  return res.status===204?null:res.json();
  }
- async function readRemote(){
-  const g=await gh('/gists/'+cfg.gistId);const f=g.files?.[FILE];
+ async function readRemote(id){
+  const g=await gh('/gists/'+id);const f=g.files?.[FILE];
   if(!f)return null;
   const text=f.truncated?await (await fetch(f.raw_url,{cache:'no-store'})).text():f.content;
   return Revisao.validateBackup(JSON.parse(text));
  }
  const body=state=>JSON.stringify({files:{[FILE]:{content:JSON.stringify(state)}}});
- async function findOrCreate(){
+ // Todos os gists de sincronização da conta, do mais antigo ao mais novo (dois aparelhos podem ter criado um cada).
+ async function locate(){
+  const found=[];
   for(let page=1;page<=10;page++){
    const list=await gh('/gists?per_page=100&page='+page);
-   const hit=list.find(g=>g.description===DESC&&g.files?.[FILE]);
-   if(hit)return hit.id;
+   for(const g of list)if(g.description===DESC&&g.files?.[FILE])found.push(g);
    if(list.length<100)break;
   }
-  const g=await gh('/gists',{method:'POST',body:JSON.stringify({description:DESC,public:false,files:{[FILE]:{content:JSON.stringify(s)}}})});
-  return g.id;
+  return found.sort((a,b)=>Date.parse(a.created_at||0)-Date.parse(b.created_at||0)).map(g=>g.id);
  }
  async function sync(){
   if(!cfg||!s)return;
@@ -48,13 +48,18 @@
   if(busy){again=true;return;}
   busy=true;status('Sincronizando…');
   try{
-   if(!cfg.gistId)save({...cfg,gistId:await findOrCreate()});
-   const remote=await readRemote();
-   const merged=SyncCore.merge(s,remote);
+   let ids=await locate();
+   if(!ids.length){const g=await gh('/gists',{method:'POST',body:JSON.stringify({description:DESC,public:false,files:{[FILE]:{content:JSON.stringify(s)}}})});ids=[g.id];}
+   const [main,...extras]=ids;
+   let merged=s;
+   for(const id of extras){try{const r=await readRemote(id);if(r)merged=SyncCore.merge(merged,r);}catch(e){if(!e.auth)throw e;}}
+   const remote=await readRemote(main);
+   merged=SyncCore.merge(merged,remote);
    Revisao.validateBackup(merged);
    if(!SyncCore.same(merged,s)){localStorage.setItem(KEY,JSON.stringify(merged));s=merged;render();}
-   if(!remote||!SyncCore.same(merged,remote))await gh('/gists/'+cfg.gistId,{method:'PATCH',body:body(merged)});
-   save({...cfg,last:new Date().toISOString()});
+   if(!remote||!SyncCore.same(merged,remote))await gh('/gists/'+main,{method:'PATCH',body:body(merged)});
+   for(const id of extras){try{await gh('/gists/'+id,{method:'DELETE'});}catch{}}
+   save({...cfg,gistId:main,last:new Date().toISOString(),cards:s.cards.length,reviews:s.history.length});
   }catch(e){status('Não sincronizou: '+e.message);if(e.auth)console.warn(e);}
   finally{busy=false;if(again){again=false;sync();}}
  }
