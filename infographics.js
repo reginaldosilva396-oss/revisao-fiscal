@@ -1,6 +1,9 @@
 'use strict';
 (()=>{
 const items=[
+['meta-32-dadm-revisao-aulas-04-05-pagina-1','Direito Administrativo','Poderes e terceiro setor · Pág. 1/3 — Poderes e deveres'],
+['meta-32-dadm-revisao-aulas-04-05-pagina-2','Direito Administrativo','Poderes e terceiro setor · Pág. 2/3 — Poder de polícia e abuso'],
+['meta-32-dadm-revisao-aulas-04-05-pagina-3','Direito Administrativo','Poderes e terceiro setor · Pág. 3/3 — Terceiro setor'],
 ['meta-32-ti-nosql-pagina-1','Tecnologia da Informação','NoSQL — conceitos e siglas · Pág. 1/2'],
 ['meta-32-ti-nosql-pagina-2','Tecnologia da Informação','NoSQL — os quatro tipos · Pág. 2/2'],
 ['meta-32-dcon-revisao-aulas-14-15-pagina-1','Direito Constitucional','Judiciário e Funções Essenciais à Justiça · Pág. 1/5 — Judiciário: regras gerais'],
