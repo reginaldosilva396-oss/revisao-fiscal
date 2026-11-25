@@ -1,6 +1,13 @@
 'use strict';
 (()=>{
 const items=[
+['meta-32-dcon-revisao-aulas-00-02-pagina-1','Direito Constitucional','Teoria da Constituição e direitos fundamentais · Pág. 1/5 — Constituição: teoria'],
+['meta-32-dcon-revisao-aulas-00-02-pagina-2','Direito Constitucional','Teoria da Constituição e direitos fundamentais · Pág. 2/5 — Eficácia e hierarquia'],
+['meta-32-dcon-revisao-aulas-00-02-pagina-3','Direito Constitucional','Teoria da Constituição e direitos fundamentais · Pág. 3/5 — Poder constituinte'],
+['meta-32-dcon-revisao-aulas-00-02-pagina-4','Direito Constitucional','Teoria da Constituição e direitos fundamentais · Pág. 4/5 — No tempo e na interpretação'],
+['meta-32-dcon-revisao-aulas-00-02-pagina-5','Direito Constitucional','Teoria da Constituição e direitos fundamentais · Pág. 5/5 — Direitos fundamentais: teoria'],
+['meta-32-aud-revisao-aula-05-pagina-1','Auditoria Privada','Evidência e procedimentos · Pág. 1/2 — Evidência de auditoria'],
+['meta-32-aud-revisao-aula-05-pagina-2','Auditoria Privada','Evidência e procedimentos · Pág. 2/2 — Procedimentos e testes'],
 ['meta-32-ctbga-revisao-aulas-12-13-pagina-1','Contabilidade Geral e Avançada','DFC e DVA · Pág. 1/3 — DFC: onde classificar'],
 ['meta-32-ctbga-revisao-aulas-12-13-pagina-2','Contabilidade Geral e Avançada','DFC e DVA · Pág. 2/3 — DFC: método indireto'],
 ['meta-32-ctbga-revisao-aulas-12-13-pagina-3','Contabilidade Geral e Avançada','DFC e DVA · Pág. 3/3 — DVA: gerar e distribuir'],
