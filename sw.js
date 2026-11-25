@@ -1,6 +1,6 @@
-const CACHE='revisao-fiscal-mobile-v14';
+const CACHE='revisao-fiscal-mobile-v15';
 const IMAGE_CACHE='revisao-fiscal-infographics-v1';
-const ASSETS=['./','./index.html','./style.css?v=12','./core.js?v=12','./app.js?v=12','./focus.js?v=12','./sync-core.js?v=12','./sync.js?v=13','./manifest.webmanifest','./icon.svg','./mobile.js','./icon-192.png','./icon-512.png','./infographics.js?v=12','./infographics.css?v=9'];
+const ASSETS=['./','./index.html','./style.css?v=12','./core.js?v=12','./app.js?v=12','./focus.js?v=12','./sync-core.js?v=12','./sync.js?v=13','./manifest.webmanifest','./icon.svg','./mobile.js','./icon-192.png','./icon-512.png','./infographics.js?v=13','./infographics.css?v=9'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(url=>new Request(url,{credentials:'include',cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('revisao-fiscal-mobile-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{

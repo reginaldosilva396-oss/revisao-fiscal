@@ -1,6 +1,8 @@
 'use strict';
 (()=>{
 const items=[
+['meta-32-dadm-revisao-aula-08-pagina-1','Direito Administrativo','Contratação direta · Pág. 1/2 — O mapa'],
+['meta-32-dadm-revisao-aula-08-pagina-2','Direito Administrativo','Contratação direta · Pág. 2/2 — Inexigível × dispensável'],
 ['meta-32-dadm-revisao-aulas-04-05-pagina-1','Direito Administrativo','Poderes e terceiro setor · Pág. 1/3 — Poderes e deveres'],
 ['meta-32-dadm-revisao-aulas-04-05-pagina-2','Direito Administrativo','Poderes e terceiro setor · Pág. 2/3 — Poder de polícia e abuso'],
 ['meta-32-dadm-revisao-aulas-04-05-pagina-3','Direito Administrativo','Poderes e terceiro setor · Pág. 3/3 — Terceiro setor'],
