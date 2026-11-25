@@ -1,6 +1,9 @@
 'use strict';
 (()=>{
 const items=[
+['meta-32-ctbga-revisao-aulas-12-13-pagina-1','Contabilidade Geral e Avançada','DFC e DVA · Pág. 1/3 — DFC: onde classificar'],
+['meta-32-ctbga-revisao-aulas-12-13-pagina-2','Contabilidade Geral e Avançada','DFC e DVA · Pág. 2/3 — DFC: método indireto'],
+['meta-32-ctbga-revisao-aulas-12-13-pagina-3','Contabilidade Geral e Avançada','DFC e DVA · Pág. 3/3 — DVA: gerar e distribuir'],
 ['meta-32-ctbga-revisao-aulas-08-10-pagina-1','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 1/3 — PL e reservas de capital'],
 ['meta-32-ctbga-revisao-aulas-08-10-pagina-2','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 2/3 — Reserva legal e destinação'],
 ['meta-32-ctbga-revisao-aulas-08-10-pagina-3','Contabilidade Geral e Avançada','Reservas, dividendos, DLPA e DMPL · Pág. 3/3 — Dividendos, DLPA e DMPL'],
