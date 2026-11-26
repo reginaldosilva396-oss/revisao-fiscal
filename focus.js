@@ -9,7 +9,7 @@
  card.before(bar);card.after(done);
  const $=id=>document.getElementById(id);
  let session=null,lastQueue=[];
- const reviewsToday=()=>s?s.history.filter(h=>Revisao.day(h.at)===Revisao.day(new Date())).length:0;
+ const reviewsToday=()=>s?Revisao.live(s).filter(h=>Revisao.day(h.at)===Revisao.day(new Date())).length:0;
  function totalDue(){if(!s)return 0;const now=Date.now();return s.cards.filter(c=>s.progress[c.id]?.due&&!s.progress[c.id]?.suspended&&Date.parse(s.progress[c.id].due)<=now).length;}
  function line(){
   if(!s)return '';
@@ -30,13 +30,13 @@
  function update(q){
   lastQueue=q||[];$('focus-line').textContent=line();
   if(session){
-   const n=s.history.length-session.base;session.done=n;
+   const n=Revisao.live(s).length-session.base;session.done=n;
    $('focus-count').textContent=`Sessão: ${Math.min(n,SIZE)} de ${SIZE}`;$('focus-fill').style.width=Math.min(100,n/SIZE*100)+'%';
    if(n>=SIZE||!lastQueue.length)finish();
   }
   $('focus-start').hidden=!!session||!lastQueue.length;$('focus-progress').hidden=!session;
  }
- function start(){if(!s||!lastQueue.length)return;session={base:s.history.length,done:0};card.hidden=false;done.hidden=true;bar.hidden=false;update(lastQueue);card.scrollIntoView({behavior:'smooth',block:'start'});}
+ function start(){if(!s||!lastQueue.length)return;session={base:Revisao.live(s).length,done:0};card.hidden=false;done.hidden=true;bar.hidden=false;update(lastQueue);card.scrollIntoView({behavior:'smooth',block:'start'});}
  $('focus-start').onclick=start;$('focus-more').onclick=start;
  $('focus-stop').onclick=()=>{done.hidden=true;card.hidden=false;bar.hidden=false;notify('Bom trabalho. Você pode retomar quando quiser.');update(lastQueue);};
  // Configuração do limite diário de vencidos
@@ -45,7 +45,7 @@
  $('saveSettings').after(cfg);
  const fill=()=>{if(s)$('maxDue').value=Revisao.dueLimit(s);};
  $('saveMaxDue').onclick=()=>{const n=Number($('maxDue').value);if(!Number.isInteger(n)||n<0||n>500)return notify('Escolha um número inteiro de 0 a 500.');if(s){const next=structuredClone(s);next.settings.maxDuePerDay=n;next.settings.changedAt=new Date().toISOString();if(persist(next))notify('Máximo diário de vencidos salvo.');}};
- window.Foco={update:q=>{update(q);fill();}};
+ window.Foco={update:q=>{update(q);fill();},visible(v){bar.hidden=!v;if(!v)done.hidden=true;}};
  render();
 })();
 

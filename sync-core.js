@@ -29,7 +29,7 @@ function merge(local,remote){
  out.progress=progress;
  // Histórico: união sem duplicar
  const hk=h=>h.cardId+'|'+h.at+'|'+h.grade,hist=new Map();
- for(const h of [...remote.history,...local.history])if(!hist.has(hk(h)))hist.set(hk(h),clone(h));
+ for(const h of [...remote.history,...local.history]){const k=hk(h),o=hist.get(k);if(!o)hist.set(k,clone(h));else if(h.undone)o.undone=true;}
  out.history=[...hist.values()].sort((a,b)=>t(a.at)-t(b.at)||a.cardId.localeCompare(b.cardId));
  // Configurações: a alteração mais recente
  out.settings=clone(t(local.settings?.changedAt)>t(remote.settings?.changedAt)?local.settings:remote.settings);

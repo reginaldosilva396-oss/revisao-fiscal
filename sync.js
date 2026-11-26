@@ -55,7 +55,7 @@
    for(const id of extras){try{const r=await readRemote(id);if(r)merged=SyncCore.merge(merged,r);}catch(e){if(!e.auth)throw e;}}
    const remote=await readRemote(main);
    merged=SyncCore.merge(merged,remote);
-   Revisao.validateBackup(merged);
+   merged=Revisao.validateBackup(merged);
    if(!SyncCore.same(merged,s)){localStorage.setItem(KEY,JSON.stringify(merged));s=merged;render();}
    if(!remote||!SyncCore.same(merged,remote))await gh('/gists/'+main,{method:'PATCH',body:body(merged)});
    for(const id of extras){try{await gh('/gists/'+id,{method:'DELETE'});}catch{}}

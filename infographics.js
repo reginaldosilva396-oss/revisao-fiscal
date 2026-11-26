@@ -36,7 +36,7 @@ const items=[
 ['meta-31-micro-conceitos-oferta-demanda','Economia','Escassez, oferta e demanda'],
 ['meta-31-rlog-argumentacao-logica','Raciocínio Lógico','Argumentação e validade']
 ];
-const cacheName='revisao-fiscal-infographics-v1';
+const cacheName='revisao-fiscal-infographics-v2';
 const grid=document.getElementById('infographic-grid');
 
 const groups=new Map();
@@ -55,19 +55,21 @@ reader.append(toolbar,readerPages);document.body.append(reader);
 function showInfographic(pages,title){
  readerTitle.textContent=title;readerPages.replaceChildren();
  for(const [id,,pageTitle]of pages){
-  const img=document.createElement('img');img.src='./infograficos/'+id+'.png';img.alt=pageTitle;img.width=1024;img.height=1536;
+  const img=document.createElement('img');img.src='./infograficos/'+id+'.webp';img.alt=pageTitle;img.width=1024;img.height=1536;
   readerPages.append(img);
  }
  reader.showModal();reader.scrollTop=0;
 }
+const index=[];
 for(const pages of groups.values()){
  pages.sort((a,b)=>a[0].localeCompare(b[0],'pt-BR',{numeric:true}));
  const [firstId,subject,firstTitle]=pages[0];
  const topic=firstId.includes('-ti-nosql-')?'NoSQL':firstTitle.split(' · Pág.')[0];
+ index.push({key:firstId.replace(/-pagina-\d+$/,''),subject,topic,pages});
  const card=document.createElement('article');card.className='info-card';
  card.dataset.meta=firstId.split('-')[1];card.dataset.subject=subject;card.dataset.topic=topic;
  const preview=document.createElement('button');preview.className='info-cover';preview.setAttribute('aria-label','Abrir infográfico completo: '+topic);
- const img=document.createElement('img');img.src='./infograficos/'+firstId+'.png';img.alt=topic;img.loading='lazy';img.width=1024;img.height=1536;
+ const img=document.createElement('img');img.src='./infograficos/'+firstId+'.webp';img.alt=topic;img.loading='lazy';img.width=1024;img.height=1536;
  preview.append(img);preview.onclick=()=>showInfographic(pages,topic);
  const meta=document.createElement('p');meta.className='eyebrow';meta.textContent='Meta '+card.dataset.meta+' · '+subject;
  const heading=document.createElement('h3');heading.textContent=topic;
@@ -103,7 +105,7 @@ button.onclick=async()=>{
   if(!('caches'in window)||!('serviceWorker'in navigator))throw Error('Este navegador não oferece armazenamento offline. Use Baixar imagem.');
   const cache=await caches.open(cacheName);let done=0;
   for(const [id] of items){
-   const url='./infograficos/'+id+'.png';status.textContent='Salvando '+(done+1)+' de '+items.length+'…';
+   const url='./infograficos/'+id+'.webp';status.textContent='Salvando '+(done+1)+' de '+items.length+'…';
    if(!await cache.match(url)){
     const res=await fetch(url,{credentials:'include'});
     if(!res.ok||!res.headers.get('content-type')?.startsWith('image/'))throw Error('Não foi possível baixar uma imagem. Verifique a conexão e tente novamente.');
@@ -115,7 +117,17 @@ button.onclick=async()=>{
  }catch(e){status.textContent=e.message;}finally{button.disabled=false;}
 };
 if(location.hash==='#infograficos')document.querySelector('[data-tab="infographics"]').click();
+// Liga cartões ao infográfico do mesmo assunto
+const STOP=new Set(['de','da','do','das','dos','e','a','o','as','os','em','no','na','ao','à','para','por','com','sem','×','x','–','-','i','ii','parte','lei']);
+const toks=x=>String(x||'').toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.has(w));
+const subjKey=x=>{const t=toks(x);return t[0]==='direito'?t.slice(0,2).join(' '):t[0];};
+window.Infograficos={
+ match(card){
+  if(card.infographic){const g=index.find(x=>x.key===card.infographic);if(g)return g;}
+  const ct=toks(card.topic);if(!ct.length)return null;let best=null,score=0;
+  for(const g of index){if(subjKey(g.subject)!==subjKey(card.subject))continue;const gt=new Set(toks(g.topic));const hit=ct.filter(w=>gt.has(w)).length/ct.length;if(hit>score){score=hit;best=g;}}
+  return score>=0.5?best:null;
+ },
+ open(g){showInfographic(g.pages,g.topic);}
+};
 })();
-
-
-
