@@ -5,7 +5,7 @@ const $=id=>document.getElementById(id);let s,current,editing,revealed=false,ceA
 const notify=t=>$('message').textContent=t;
 const el=(tag,props={},...kids)=>{const e=document.createElement(tag);for(const [k,v]of Object.entries(props)){if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else if(k.startsWith('on'))e[k]=v;else e.setAttribute(k,v);}for(const k of kids)if(k!=null)e.append(k);return e;};
 try{s=localStorage.getItem(KEY)?R.validateBackup(JSON.parse(localStorage.getItem(KEY))):R.empty();}catch(e){s=null;notify('Dados locais não puderam ser lidos. Exporte os dados brutos antes de restaurar um backup. '+e.message);}
-function persist(next){try{localStorage.setItem(KEY,JSON.stringify(next));s=next;render();window.Sync?.changed();window.Dash?.refresh();return true;}catch(e){notify('Não foi possível salvar. A operação não foi aplicada: '+e.message);return false;}}
+function persist(next){try{localStorage.setItem(KEY,JSON.stringify(next));s=next;render();window.Sync?.changed();window.Dash?.refresh();window.Player?.update();return true;}catch(e){notify('Não foi possível salvar. A operação não foi aplicada: '+e.message);return false;}}
 function download(name,data){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([typeof data==='string'?data:JSON.stringify(data,null,2)],{type:'application/json'}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 function safety(withFile=true){const raw=localStorage.getItem(KEY);if(raw){localStorage.setItem(PREV,raw);if(withFile)download('revisao-fiscal-antes-da-alteracao.json',raw);}}
 
